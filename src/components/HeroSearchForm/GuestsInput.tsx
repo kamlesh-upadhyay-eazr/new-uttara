@@ -6,9 +6,13 @@ import ClearDataButton from "./ClearDataButton";
 import ButtonSubmit from "./ButtonSubmit";
 import { GuestsObject } from "components/HeroSearchForm2Mobile/GuestsInput";
 import { PathName } from "routers/types";
+import { useDispatch } from "react-redux";
+import { getTotalGuest } from "store/guestCounter/action";
 
 export interface GuestsInputProps {
   defaultValue: GuestsObject;
+  eventPrice?: number;
+  parentCallback?: any;
   onChange?: (data: GuestsObject) => void;
   fieldClassName?: string;
   className?: string;
@@ -18,27 +22,23 @@ export interface GuestsInputProps {
 
 const GuestsInput: FC<GuestsInputProps> = ({
   defaultValue,
+  eventPrice,
+  parentCallback,
   onChange,
   fieldClassName = "[ nc-hero-field-padding ]",
   className = "[ nc-flex-1 ]",
   buttonSubmitHref = "/listing-stay-map",
   hasButtonSubmit = true,
 }) => {
-  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(
-    defaultValue.guestAdults || 0
-  );
-  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(
-    defaultValue.guestChildren || 0
-  );
-  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(
-    defaultValue.guestInfants || 0
-  );
+  const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(0);
+  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0);
+  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0);
 
-  useEffect(() => {
-    setGuestAdultsInputValue(defaultValue.guestAdults || 0);
-    setGuestChildrenInputValue(defaultValue.guestChildren || 0);
-    setGuestInfantsInputValue(defaultValue.guestInfants || 0);
-  }, [defaultValue]);
+  // useEffect(() => {
+  //   setGuestAdultsInputValue(defaultValue.guestAdults || 0);
+  //   setGuestChildrenInputValue(defaultValue.guestChildren || 0);
+  //   setGuestInfantsInputValue(defaultValue.guestInfants || 0);
+  // }, [defaultValue]);
 
   const handleChangeData = (value: number, type: keyof GuestsObject) => {
     let newValue = {
@@ -60,9 +60,28 @@ const GuestsInput: FC<GuestsInputProps> = ({
     }
     onChange && onChange(newValue);
   };
-
+  const dispatch = useDispatch();
   const totalGuests =
     guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue;
+
+  useEffect(() => {
+    dispatch(getTotalGuest(totalGuests));
+  }, [totalGuests]);
+
+  const totalParticipants = (totalGuests: any) => {
+    parentCallback(totalGuests);
+    // console.log("totalGuests", totalGuests);
+  };
+
+  // console.log("totalGuests", totalGuests);
+
+  // useEffect(() => {
+  //   totalParticipants();
+  // },[])
+
+  // console.log("totalGuests", totalGuests, eventPrice);
+  // console.log("guestAdultsInputValue", guestAdultsInputValue);
+  // console.log("defaultValue", defaultValue, totalGuests);
 
   return (
     <Popover className={`flex relative ${className}`}>
@@ -107,6 +126,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
               {!!totalGuests && open && (
                 <ClearDataButton
                   onClick={() => {
+                    // totalParticipants()
                     setGuestAdultsInputValue(0);
                     setGuestChildrenInputValue(0);
                     setGuestInfantsInputValue(0);
@@ -136,6 +156,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                 className="w-full"
                 defaultValue={guestAdultsInputValue}
                 onChange={(value) => handleChangeData(value, "guestAdults")}
+                totalGuests={totalGuests}
                 max={10}
                 min={1}
                 label="Adults"
@@ -145,6 +166,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                 className="w-full mt-6"
                 defaultValue={guestChildrenInputValue}
                 onChange={(value) => handleChangeData(value, "guestChildren")}
+                totalGuests={totalGuests}
                 max={10}
                 label="Children"
                 desc="Ages 2–12"
@@ -154,6 +176,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                 className="w-full mt-6"
                 defaultValue={guestInfantsInputValue}
                 onChange={(value) => handleChangeData(value, "guestInfants")}
+                totalGuests={totalGuests}
                 max={4}
                 label="Infants"
                 desc="Ages 0–2"

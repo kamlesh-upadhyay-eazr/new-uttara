@@ -1,4 +1,4 @@
-import React, { FC, Fragment, useState } from "react";
+import React, { FC, Fragment, useEffect, useState } from "react";
 import { Dialog, Transition } from "@headlessui/react";
 import { ArrowRightIcon } from "@heroicons/react/24/outline";
 import LocationMarker from "components/AnyReactComponent/LocationMarker";
@@ -30,13 +30,22 @@ import SectionSliderNewCategories from "components/SectionSliderNewCategories/Se
 import SectionSubscribe2 from "components/SectionSubscribe2/SectionSubscribe2";
 import StayDatesRangeInput from "components/HeroSearchForm/StayDatesRangeInput";
 import MobileFooterSticky from "./MobileFooterSticky";
+import { useSelector } from "react-redux";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
+import { ip } from "config/config";
+import { useDispatch } from "react-redux";
+import { getTotalPrice } from "store/guestCounter/action";
+import { getCurrentAdmin } from "store/auth/signin/actions";
 
-export interface ListingStayDetailPageProps {
-  className?: string;
-  isPreviewMode?: boolean;
-}
 
-const PHOTOS: string[] = [
+
+// export interface ListingStayDetailPageProps {
+//   className?: string;
+//   isPreviewMode?: boolean;
+// }
+
+const PHOTOS = [
   "https://images.pexels.com/photos/6129967/pexels-photo-6129967.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
   "https://images.pexels.com/photos/7163619/pexels-photo-7163619.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
   "https://images.pexels.com/photos/6527036/pexels-photo-6527036.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
@@ -78,21 +87,49 @@ const Amenities_demos = [
   { name: "la-infinity", icon: "la-infinity" },
 ];
 
-const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
+
+
+const ListingStayDetailPage = ({
   className = "",
   isPreviewMode,
+  // totalGuests
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [price, setPrice] = useState(1000);
+  const [allGuests, setAllGuests] = useState(0);
   const [openFocusIndex, setOpenFocusIndex] = useState(0);
-  const [selectedDate, setSelectedDate] = useState<DateRage>({
+  const [selectedDate, setSelectedDate] = useState({
     startDate: moment().add(4, "days"),
     endDate: moment().add(10, "days"),
   });
+
+
   const [focusedInputSectionCheckDate, setFocusedInputSectionCheckDate] =
-    useState<FocusedInputShape>("startDate");
+    useState("startDate");
   let [isOpenModalAmenities, setIsOpenModalAmenities] = useState(false);
 
   const windowSize = useWindowSize();
+
+  const { totalGuest } = useSelector(
+    (state) => state.GuestInputs
+  );
+
+  const { admin } = useSelector((state) => state.loginReducer);
+
+  const UserId = admin?._id;
+ 
+
+  const history = useNavigate();
+  const dispatch = useDispatch();
+
+  useEffect(() => {
+    dispatch(getCurrentAdmin(admin));
+  },[]);
+
+  console.log("totalGuest", totalGuest);
+  console.log("admin", admin);
+  
+  
 
   const getDaySize = () => {
     if (windowSize.width <= 375) {
@@ -115,10 +152,12 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
     setIsOpenModalAmenities(true);
   }
 
-  const handleOpenModal = (index: number) => {
+  const handleOpenModal = (index) => {
     setIsOpen(true);
     setOpenFocusIndex(index);
   };
+
+  const navigate = useNavigate();
 
   const handleCloseModal = () => setIsOpen(false);
 
@@ -629,15 +668,29 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
     );
   };
 
+  const callbackFunction = (childData) => {
+    console.log("child",childData);
+    
+    setAllGuests(childData);
+  };
+
+  const serviceCharge = price / 8 || 0;
+   const amount = price * totalGuest + serviceCharge;
+
+   useEffect(() => {
+     dispatch(getTotalPrice(amount));
+   }, [amount]);
+
   const renderSidebar = () => {
+
     return (
       <div className="listingSectionSidebar__wrap shadow-xl">
         {/* PRICE */}
         <div className="flex justify-between">
           <span className="text-3xl font-semibold">
-            $119
+            ${price}
             <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
-              /night
+              /Day
             </span>
           </span>
           <StartRating />
@@ -662,6 +715,8 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
               guestChildren: 0,
               guestInfants: 0,
             }}
+            eventPrice={price}
+            parentCallback={callbackFunction}
             hasButtonSubmit={false}
           />
         </form>
@@ -669,25 +724,79 @@ const ListingStayDetailPage: FC<ListingStayDetailPageProps> = ({
         {/* SUM */}
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
-            <span>$119 x 3 night</span>
-            <span>₹357</span>
+            <span>
+              ${price} x {totalGuest} participants
+            </span>
+            {/* <span>${price * allGuests || 4}</span> */}
+            <span>${price * totalGuest || 0}</span>
           </div>
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
             <span>Service charge</span>
-            <span>₹0</span>
+            <span>${serviceCharge || 0}</span>
           </div>
           <div className="border-b border-neutral-200 dark:border-neutral-700"></div>
           <div className="flex justify-between font-semibold">
             <span>Total</span>
-            <span>₹199</span>
+            <span>{amount}</span>
           </div>
         </div>
 
         {/* SUBMIT */}
-        <ButtonPrimary href={"/checkout"}>Reserve</ButtonPrimary>
+        {/* <ButtonPrimary href={"/checkout"}>Reserve</ButtonPrimary> */}
+        {/* <ButtonPrimary href={"/pay-done"}>Reserve</ButtonPrimary> */}
+
+        {localStorage.accessToken === undefined ? (
+          <ButtonPrimary href={`/login`}>Reserve</ButtonPrimary>
+        ) : (
+          <ButtonPrimary href={`/ParticipantForm/${UserId}`}>
+            Reserve
+          </ButtonPrimary>
+        )}
       </div>
     );
   };
+
+  // const initPayment = (data ) => {
+  //   console.log("dataaaa", data);
+  //   const options = {
+  //     key: "rzp_test_yGPBt7cSBGmL3K",
+  //     amount: data.amount,
+  //     currency: data.currency,
+  //     description: "Transactions",
+  //     order_id: data.id,
+  //     modal: {
+  //       ondismiss: function () {
+  //         window.location.replace("/");
+  //       },
+  //     },
+  //     handler: async (response ) => {
+  //       try {
+  //         const verifyUrl = `${ip}/tc-verify`;
+  //         const { data } = await axios.post(verifyUrl, response);
+  //         if (data.message === "Payment verified successfully") {
+  //           // history(`/ticket/sales`);
+  //         } else {
+  //           history(`/`);
+  //         }
+  //       } catch (error) {
+  //         alert(error);
+  //         history(`/`);
+  //       }
+  //     },
+  //     theme: {
+  //       color: "#3399cc",
+  //     },
+  //   };
+  //   const rzp1 = new window.Razorpay(options);
+  //   rzp1.open(rzp1);
+  // };
+
+  // const handlePayment = () => {
+  //   const orderUrl = `${ip}/tc-orders`;
+  //   axios.post(orderUrl, { amount }).then((res) => {
+  //     initPayment(res.data);
+  //   });
+  // };
 
   return (
     <div

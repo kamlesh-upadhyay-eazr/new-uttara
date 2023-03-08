@@ -52,8 +52,9 @@ export interface LocationStates {
   "/about"?: {};
   "/contact"?: {};
   "/login"?: {};
-  "/login-otp"?: {};
+  "/login-otp/:contactNumber"?: {};
   "/signup"?: {};
+  "/ParticipantForm/:id"?: {};
   "/forgot-pass"?: {};
   "/page404"?: {};
   "/subscription"?: {};
@@ -64,5 +65,5 @@ export type PathName = keyof LocationStates;
 export interface Page {
   path: PathName;
   exact?: boolean;
-  component: ComponentType<Object>;
+  component: ComponentType<Object> | any;
 }

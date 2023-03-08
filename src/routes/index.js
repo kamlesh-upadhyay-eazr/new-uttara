@@ -1,5 +1,5 @@
-import React, { ComponentType } from "react";
-import { BrowserRouter, Routes, Route, Navigate, RouteProps } from "react-router-dom";
+import React from "react";
+import { BrowserRouter, Routes, Route } from "react-router-dom";
 import { Page } from "./types";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "shared/Footer/Footer";
@@ -48,9 +48,8 @@ import PageLogin from "containers/PageLogin/PageLogin";
 import PageSignUp from "containers/PageSignUp/PageSignUp";
 import ListingStayDetailPage from "containers/ListingDetailPage/ListingStayDetailPage";
 import ParticipantForm from "containers/ParticipantForm/ParticipantForm";
-import { useSelector } from "react-redux";
 
-export const pages: Page[] = [
+const authProtectedRoutes = [
   { path: "/", exact: true, component: PageHome },
   { path: "/#", exact: true, component: PageHome },
   { path: "/home-1-header-2", exact: true, component: PageHome },
@@ -105,75 +104,20 @@ export const pages: Page[] = [
   { path: "/add-listing-8", component: PageAddListing8 },
   { path: "/add-listing-9", component: PageAddListing9 },
   { path: "/add-listing-10", component: PageAddListing10 },
-  //
   { path: "/contact", component: PageContact },
   { path: "/about", component: PageAbout },
-  { path: "/signup", component: PageSignUp },
+  
   { path: "/ParticipantForm/:id", component: ParticipantForm },
-  { path: "/login", component: PageLogin },
-  { path: "/login-otp/:contactNumber", component: PageLoginOtp },
+  
+  
   { path: "/subscription", component: PageSubcription },
-  //
+  { path: "/", exact: true, component: PageHome },
 ];
 
-const MyRoutes = () => {
-  const WIN_WIDTH = useWindowSize().width || window.innerWidth;
+const publicRoutes = [
+  { path: "/signup", component: PageSignUp },
+  { path: "/login", component: PageLogin },
+  { path: "/login-otp/:contactNumber", component: PageLoginOtp },
+];
 
-  const { isAuthenticated, isAuthProtected } = useSelector(
-    (state: any) => state.loginReducer
-  );
-
-
-  // const ProtectedRoute = ({
-  //   component: Component,
-  //   isAuthenticated,
-  //   ...rest
-  // }) => {
-  //   return (
-  //     <Route
-  //       {...rest}
-  //       element={isAuthenticated ? <Component /> : <Navigate to="/login" />}
-  //     />
-  //   );
-  // };
-
-  // Use the ProtectedRoute component in your Routes
-  // <Routes>
-  //   {pages.map(({ component, path, isProtected }) => {
-  //     const Component = component;
-  //     return isProtected ? (
-  //       <ProtectedRoute
-  //         key={path}
-  //         isAuthenticated={/* check if user is authenticated */}
-  //         path={path}
-  //         component={Component}
-  //       />
-  //     ) : (
-  //       <Route key={path} path={path} element={<Component />} />
-  //     );
-  //   })}
-  //   <Route path="*" element={<Page404 />} />
-  // </Routes>;
-
-  // const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component, isAuthenticated, ...rest }) => {
-  return (
-    
-    <BrowserRouter basename={"chisfis"}>
-      <ScrollToTop />
-      <SiteHeader />
-      
-      <Routes>
-        {pages.map(({ component, path }) => {
-          const Component = component;
-          return <Route key={path} element={<Component />} path={path} />;
-        })}
-        <Route element={`/`} />
-      </Routes>
-
-      {WIN_WIDTH < 768 && <FooterNav />}
-      <Footer />
-    </BrowserRouter>
-  );
-};
-
-export default MyRoutes;
+export { authProtectedRoutes, publicRoutes };

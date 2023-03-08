@@ -1,35 +1,32 @@
-import React, { FC, useState } from "react";
+import React, { FC, useEffect, useState } from "react";
 import facebookSvg from "images/Facebook.svg";
 import twitterSvg from "images/Twitter.svg";
 import googleSvg from "images/Google.svg";
 import { Helmet } from "react-helmet";
 import Input from "shared/Input/Input";
-import { useForm, Resolver } from "react-hook-form";
-import { Link } from "react-router-dom";
+import { Link, useNavigate, useParams } from "react-router-dom";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import OtpInput from "react-otp-input";
+import { useForm } from "react-hook-form";
+import axios from "axios";
+import { ip } from "config/config";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
+import {
+  login,
+  getCurrentAdmin,
+  adminVerify,
+  setContactNumber,
+  resendOTP,
+  setContactNumbers,
+} from "../../store/auth/signin/actions";
 
-export interface PageLoginProps {
-  className?: string;
-}
+// export interface PageLoginOtpProps {
+//   className?: string;
+// }
 
-type FormValues = {
-  otp: string;
-};
-
-// const resolver: Resolver<FormValues> = async (values) => {
-//   return {
-    
-//     values: values.otp ? values : {},
-//     errors: !values.otp 
-//       ? {
-//           phone: {
-//             type: 'required',
-//             message: 'This is required.',
-//           }
-//         }
-//       : {},
-//   };
+// type FormValues = {
+//   otp: string;
 // };
 
 const loginSocials = [
@@ -50,24 +47,74 @@ const loginSocials = [
   },
 ];
 
-const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
-
+const PageLoginOtp = ({ className = "" }) => {
   const {
     register,
     handleSubmit,
     setValue,
     formState: { errors },
-  } = useForm<FormValues>();
+  } = useForm();
+
+  const [err, setErr] = useState("");
+
+  const dispatch = useDispatch();
+  const history = useNavigate();
+
+  // const { contactNumber } = useParams();
+  const { currentAdmin, error, contactNumber } = useSelector(
+    (state) => state.loginReducer
+  );
+
+  console.log("currentAdmin", currentAdmin);
+
+  // console.log("contactNumber", contactNumber);
+
   const [otp, setOtp] = useState("");
 
-  const handleChange = (value: any) => {
+  const handleChange = (value) => {
     setOtp(value);
   };
 
-  // const dispatch = useDispatch();
-  // const history = useNavigate();
+  useEffect(() => {
+    dispatch(setContactNumbers(contactNumber));
+  }, []);
 
-  const onSubmit = handleSubmit((data) => console.log("data",data));
+  useEffect(() => {
+    debugger;
+    dispatch(getCurrentAdmin(currentAdmin));
+  }, []);
+
+  const resendOtp = () => {
+    debugger;
+    dispatch(resendOTP(contactNumber));
+  };
+  const onSubmit = () => {
+    dispatch(adminVerify(contactNumber, otp, history));
+  };
+
+  console.log("currentAdmin", currentAdmin);
+
+  // const onSubmit = handleSubmit(() => {
+  //   axios
+  //     .post(`${ip}/user-verifyOTP`, { contactNumber, otp })
+  //     .then((res) => {
+  //       console.log("res>>>", res);
+        
+  //       if (res?.status === 200) {
+  //         navigate(`/`);
+  //       }
+  //       return res.data;
+  //     })
+  //     .catch((err) => {console.log("er>>", err);
+      
+  //       if (err?.response?.status !== 200) {
+  //         navigate(`/login-otp/${contactNumber}`);
+  //       }
+  //       setErr(err?.response?.data?.otpverify);
+  //       return err.message;
+  //     });
+     
+  // });
 
   return (
     <div className={`nc-PageLogin ${className}`} data-nc-id="PageLogin">
@@ -105,21 +152,20 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
             <div className="absolute left-0 w-full top-1/2 transform -translate-y-1/2 border border-neutral-100 dark:border-neutral-800"></div>
           </div> */}
           {/* FORM */}
-          <form className="grid grid-cols-1 gap-6" action="#" method="post">
-            <label className="block">
-              <span style={{display:"flex", justifyContent:"center", alignItems:"center"}} className="text-neutral-800 dark:text-neutral-200">
-                OTP
-              </span>
-              {/* <div
+          <form
+            className="grid grid-cols-1 gap-6"
+            onSubmit={handleSubmit(onSubmit)}
+          >
+            <div
               className="modal-pin-form mb-4"
               style={{
                 margin: "0 auto",
                 display: "flex",
                 justifyContent: "center",
               }}
-            > */}
+            >
               <OtpInput
-                onChange={(value: any) => {
+                onChange={(value) => {
                   handleChange(value);
                 }}
                 inputStyle={{
@@ -132,14 +178,8 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
                 value={otp}
                 numInputs={4}
               />
-            {/* </div> */}
-              {/* <input {...register("otp")}
-                type="text"
-                placeholder="+91"
-                className="mt-1"
-              /> */}
-              {errors?.otp && <p>{errors.otp.message}</p>}
-            </label>
+            </div>
+            <span style={{color:'red', display:"flex", justifyContent:"center", alignItems:"center"}}>{err}</span>
             {/* <label className="block">
               <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                 Password
@@ -149,10 +189,7 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
               </span>
               <Input type="password" className="mt-1" />
             </label> */}
-            {/* <Link style={{display:"flex", justifyContent:"center", alignItems:"center"}} 
-              to="/login-otp"> */}
-              <ButtonPrimary type="submit">Continue</ButtonPrimary>
-             {/* </Link> */}
+            <ButtonPrimary type="submit">Continue</ButtonPrimary>
           </form>
 
           {/* ==== */}
@@ -166,4 +203,4 @@ const PageLogin: FC<PageLoginProps> = ({ className = "" }) => {
   );
 };
 
-export default PageLogin;
+export default PageLoginOtp;

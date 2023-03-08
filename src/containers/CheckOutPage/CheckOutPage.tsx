@@ -16,6 +16,7 @@ import { DateRage } from "components/HeroSearchForm/StaySearchForm";
 import converSelectedDateToString from "utils/converSelectedDateToString";
 import ModalSelectGuests from "components/ModalSelectGuests";
 import { GuestsObject } from "components/HeroSearchForm2Mobile/GuestsInput";
+import { useSelector } from "react-redux";
 
 export interface CheckOutPageProps {
   className?: string;
@@ -27,10 +28,12 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
     endDate: moment().add(5, "days"),
   });
   const [guests, setGuests] = useState<GuestsObject>({
-    guestAdults: 2,
-    guestChildren: 1,
-    guestInfants: 1,
+    // guestAdults: 3,
+    // guestChildren: 1,
+    // guestInfants: 1,
   });
+
+  const { totalGuest } = useSelector((state: any) => state.GuestInputs);
 
   const renderSidebar = () => {
     return (
@@ -91,7 +94,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
             <NcModal
               renderTrigger={(openModal) => (
                 <span
-                  onClick={() => openModal()}
+                  // onClick={() => openModal()}
                   className="block lg:hidden underline  mt-1 cursor-pointer"
                 >
                   View booking details
@@ -101,7 +104,11 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
               modalTitle="Booking details"
             />
           </div>
-          <div className="mt-6 border border-neutral-200 dark:border-neutral-700 rounded-3xl flex flex-col sm:flex-row divide-y sm:divide-x sm:divide-y-0 divide-neutral-200 dark:divide-neutral-700">
+          <div
+            className="mt-6 border border-neutral-200 dark:border-neutral-700 
+          rounded-3xl flex flex-col sm:flex-row divide-y sm:divide-x sm:divide-y-0 
+          divide-neutral-200 dark:divide-neutral-700"
+          >
             <ModalSelectDate
               defaultValue={rangeDates}
               onSelectDate={setRangeDates}
@@ -117,7 +124,7 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
                       {converSelectedDateToString(rangeDates)}
                     </span>
                   </div>
-                  <PencilSquareIcon className="w-6 h-6 text-neutral-6000 dark:text-neutral-400" />
+                  {/* <PencilSquareIcon className="w-6 h-6 text-neutral-6000 dark:text-neutral-400" /> */}
                 </button>
               )}
             />
@@ -135,10 +142,11 @@ const CheckOutPage: FC<CheckOutPageProps> = ({ className = "" }) => {
                     <span className="text-sm text-neutral-400">Guests</span>
                     <span className="mt-1.5 text-lg font-semibold">
                       <span className="line-clamp-1">
-                        {`${
+                        {/* {`${
                           (guests.guestAdults || 0) +
                           (guests.guestChildren || 0)
-                        } Guests, ${guests.guestInfants || 0} Infants`}
+                        } Guests, ${guests.guestInfants || 0} Infants`} */}
+                        {totalGuest}
                       </span>
                     </span>
                   </div>

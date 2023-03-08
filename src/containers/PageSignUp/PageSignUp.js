@@ -1,4 +1,4 @@
-import React, { FC, useEffect } from "react";
+import React, { FC, useEffect, useState } from "react";
 import facebookSvg from "images/Facebook.svg";
 import twitterSvg from "images/Twitter.svg";
 import googleSvg from "images/Google.svg";
@@ -9,48 +9,47 @@ import { Link } from "react-router-dom";
 import FormItem from "containers/PageAddListing1/FormItem";
 // import Select from "shared/Select/Select";
 import { useForm, Resolver } from "react-hook-form";
-import { TextField, Select } from '@material-ui/core';
-import { Autocomplete } from '@material-ui/lab';
+import { TextField, Select } from "@material-ui/core";
+import { Autocomplete } from "@material-ui/lab";
 import { useDispatch } from "react-redux";
 import { useNavigate } from "react-router-dom";
-import { getAdminById } from "store/auth/register/actions";
+import { getAdminById, registerAdminSuccess } from "store/auth/register/actions";
+import axios from "axios";
+import { ip } from "config/config";
+// import { registerAdminSuccess } from "../../../store/auth/register/actions";
 
-enum GenderEnum {
-  female = "female",
-  male = "male",
-  other = "other"
-}
+// enum GenderEnum {
+//   female = "female",
+//   male = "male",
+//   other = "other",
+// }
 
-type FormValues = {
-  firstName: string;
-  lastName: string;
-  email: string;
-  password: string;
-  gender: GenderEnum;
-  phone: string;
-};
+// type FormValues = {
+//   firstName: string;
+//   lastName: string;
+//   email: string;
+//   password: string;
+//   gender: GenderEnum;
+//   contactNumber: string;
+// };
 
-const resolver: Resolver<FormValues> = async (values) => {
-  
+const resolver = async (values) => {
   return {
-    
-    values: values.phone ? values : {},
-    errors: !values.phone 
+    values: values.contactNumber ? values : {},
+    errors: !values.contactNumber
       ? {
-          phone: {
-            type: 'required',
-            message: 'This is required.',
-          }
+          contactNumber: {
+            type: "required",
+            message: "This is required.",
+          },
         }
       : {},
   };
 };
 
-
-
-export interface PageSignUpProps {
-  className?: string;
-}
+// export interface PageSignUpProps {
+//   className?: string;
+// }
 
 // const loginSocials = [
 //   {
@@ -70,24 +69,55 @@ export interface PageSignUpProps {
 //   },
 // ];
 
-const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
-
+const PageSignUp = ({ className = "" }) => {
   const {
     register,
     handleSubmit,
     setValue,
+    getValues,
     formState: { errors },
-  } = useForm<FormValues>({resolver});
+  } = useForm({ resolver });
 
   const dispatch = useDispatch();
   const history = useNavigate();
 
-  const onSubmit = handleSubmit((data) => console.log("data",data));
+  const [error, setError] = useState("Not Valid");
+  const onSubmit = (data) => {
+    debugger;
+    console.log("data", data);
+    dispatch(registerAdminSuccess(data, history));
+  };
 
+  // const onSubmit = handleSubmit((data) => {
+  //   console.log(data);
+
+  //   //  const contactNumber = getValues("contactNumber");
+  //   axios
+  //     .post(`${ip}/register-user`, data)
+  //     .then((res) => {
+  //       console.log("res", res);
+        
+  //       if(res.data.status === 201){
+  //         navigate("/login");
+  //       }
+  //       return res.data;
+  //     })
+  //     .catch((err) => {
+
+  //       console.log("err", err);
+        
+  //       if(err.response.data.status !== 201){
+  //         navigate("/signup");
+  //       }
+  //       setError(err?.response?.data?.message);
+  //       return err.message;
+  //     });
+  // });
   // useEffect(() => {
   //   dispatch(getAdminById());
   // },[]);
-  
+
+  console.log("errors", errors);
 
   return (
     <div className={`nc-PageSignUp  ${className}`} data-nc-id="PageSignUp">
@@ -126,13 +156,13 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
           </div> */}
           {/* FORM */}
           {/* <form className="grid grid-cols-1 gap-6" action="#" method="post"> */}
-          <form className="grid grid-cols-1 gap-6" onSubmit={(onSubmit)}>
-
+          <form className="grid grid-cols-1 gap-6" onSubmit={handleSubmit(onSubmit)}>
             <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
                 First Name
               </span>
-              <input {...register("firstName")}
+              <input
+                {...register("firstName")}
                 type="text"
                 placeholder="First Name"
                 className="mt-1"
@@ -144,7 +174,8 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
               <span className="text-neutral-800 dark:text-neutral-200">
                 Last Name
               </span>
-              <input {...register("lastName")}
+              <input
+                {...register("lastName")}
                 type="text"
                 placeholder="Last Name"
                 className="mt-1"
@@ -156,7 +187,8 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
               <span className="text-neutral-800 dark:text-neutral-200">
                 Email address
               </span>
-              <input {...register("email")}
+              <input
+                {...register("email")}
                 type="email"
                 placeholder="example@example.com"
                 className="mt-1"
@@ -166,14 +198,15 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
 
             <label className="block">
               <span className="text-neutral-800 dark:text-neutral-200">
-                Phone
+                contactNumber
               </span>
-              <input {...register("phone")}
+              <input
+                {...register("contactNumber")}
                 type="text"
-                placeholder="Phone"
+                placeholder="contactNumber"
                 className="mt-1"
               />
-              {errors?.phone && <p>{errors.phone.message}</p>}
+              {errors?.contactNumber && <p>{errors.contactNumber.message}</p>}
             </label>
             {/* <label className="block">
               <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
@@ -184,16 +217,18 @@ const PageSignUp: FC<PageSignUpProps> = ({ className = "" }) => {
 
             {/* <FormItem */}
             <label className="block">
-             {/* desc="Entire place: Guests have the whole place to themselves—there's a private entrance and no shared spaces. A bedroom, bathroom, and kitchen are usually included." */}
+              {/* desc="Entire place: Guests have the whole place to themselves—there's a private entrance and no shared spaces. A bedroom, bathroom, and kitchen are usually included." */}
               <span className="flex justify-between items-center text-neutral-800 dark:text-neutral-200">
                 Gender
               </span>
-            <select {...register("gender")}>
-              <option value="Male">Male</option>
-              <option value="Female">Female</option>
-            </select>
+              <select {...register("gender")}>
+                <option value="Male">Male</option>
+                <option value="Female">Female</option>
+              </select>
             </label>
-          {/* </FormItem> */}
+
+            {/* <span style={{color:"red"}}>{error || ""}</span> */}
+            {/* </FormItem> */}
             <ButtonPrimary type="submit">Continue</ButtonPrimary>
           </form>
 

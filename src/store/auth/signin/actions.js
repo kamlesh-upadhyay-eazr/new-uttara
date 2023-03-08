@@ -59,11 +59,34 @@ const setLoginLoading = () => {
 //   };
 // };
 
-export const login = (contactNumber) => {
+export const login = (contactNumber, history) => {
+  debugger;
   return (dispatch) => {
     dispatch(setLoginLoading());
     axios
       .post(`${ip}/admin-sendOTP`, { contactNumber })
+      .then((res) => {
+        debugger;
+        dispatch({
+          type: OTP_SENT,
+          payload: res.data?.message,
+        });
+        history(`/login-otp/${contactNumber}`)
+      })
+      .catch((err) => {
+        dispatch({
+          type: OTP_SENT_FAILED,
+          payload: err.response?.data?.message,
+        });
+      });
+  };
+};
+
+export const userLogin = (contactNumber) => {
+  return (dispatch) => {
+    dispatch(setLoginLoading());
+    axios
+      .post(`${ip}/user-sendOTP`, { contactNumber })
       .then((res) => {
         dispatch({
           type: OTP_SENT,
@@ -125,7 +148,8 @@ export const operatorlogin = (contactNumber, history) => {
   };
 };
 
-export const setContactNumber = (contactNumber) => {
+export const setContactNumbers = (contactNumber) => {
+  debugger;
   return {
     type: SET_CONTACT_NUMBER,
     payload: contactNumber,
@@ -134,6 +158,7 @@ export const setContactNumber = (contactNumber) => {
 
 export const adminVerify =
   (contactNumber, otp, history) => async (dispatch) => {
+    console.log("contactNumber", contactNumber, otp);
     try {
       const res = await axios.post(`${ip}/admin-verifyOTP`, {
         contactNumber,
@@ -146,7 +171,7 @@ export const adminVerify =
         setAuthToken(accessToken);
         // const decoded = jwt_decode(token);
         dispatch(loginAdminSuccessful(res.data));
-        history.push("/");
+        history("/");
       }
     } catch (error) {
       dispatch({
@@ -200,6 +225,7 @@ export const resendOTP = (contactNumber) => {
 };
 
 export const loginAdminSuccessful = (admin) => {
+  debugger;
   return {
     type: LOGIN_ADMIN_SUCCESSFUL,
     payload: admin,
@@ -213,30 +239,44 @@ export const setErrorMessage = (error) => {
   };
 };
 
-export const getCurrentAdmin = () => {
-  return (dispatch) => {
-    dispatch(setLoginLoading());
-    axios
-      .get(`${ip}/admin/me`)
-      .then((res) => {
-        dispatch({
-          type: GET_CURRENT_ADMIN_SUCCESS,
-          payload: res.data,
-        });
-      })
-      .catch((err) => {
-        dispatch({
-          type: GET_CURRENT_ADMIN_FAILED,
-          payload: err.messaage,
-        });
-      });
+export const getCurrentAdmin = (admin) => {
+  debugger;
+  return {
+    type: GET_CURRENT_ADMIN_SUCCESS,
+    payload:admin
   };
-};
+}
+
+// export const getCurrentAdmin = () => {
+//   debugger;
+//   return (dispatch) => {
+//     dispatch(setLoginLoading());
+//     axios
+//       .get(`${ip}/admin/me`, {
+//         // headers: {
+//         //   Authorization: `Bearer ${localStorage.accessToken}`,
+//         // },
+//       })
+//       .then((res) => {
+//         debugger;
+//         dispatch({
+//           type: GET_CURRENT_ADMIN_SUCCESS,
+//           payload: res.data,
+//         });
+//       })
+//       .catch((err) => {
+//         dispatch({
+//           type: GET_CURRENT_ADMIN_FAILED,
+//           payload: err.messaage,
+//         });
+//       });
+//   };
+// };
 
 export const setCurrentAdmin = (decoded) => {
   return {
     type: SET_CURRENT_ADMIN,
-    payload: decoded,
+    payload: {decoded},
   };
 };
 

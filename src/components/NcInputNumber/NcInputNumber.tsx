@@ -6,6 +6,7 @@ export interface NcInputNumberProps {
   defaultValue?: number;
   min?: number;
   max?: number;
+  totalGuests?: any;
   onChange?: (value: number) => void;
   label?: string;
   desc?: string;
@@ -16,6 +17,7 @@ const NcInputNumber: FC<NcInputNumberProps> = ({
   defaultValue = 0,
   min = 0,
   max,
+  totalGuests,
   onChange,
   label,
   desc,
@@ -34,6 +36,7 @@ const NcInputNumber: FC<NcInputNumberProps> = ({
     onChange && onChange(value - 1);
   };
   const handleClickIncrement = () => {
+    debugger;
     if (max && max <= value) return;
     setValue((state) => {
       return state + 1;

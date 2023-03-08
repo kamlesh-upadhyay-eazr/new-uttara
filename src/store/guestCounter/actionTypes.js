@@ -1,0 +1,3 @@
+export const GET_TOTAL_GUEST = "GET_TOTAL_GUEST";
+export const GET_TOTAL_PRICE = "GET_TOTAL_PRICE";
+export const INCREMENT_CHILD = "INCREMENT_CHILD";

@@ -97,7 +97,7 @@ export const registerAdminSuccess = (data, history) => {
         type: REGISTER_ADMIN_SUCCESS,
         payload: res.data
       })
-      history.push("/sign-in");
+      history("/login");
     })
     .catch((err) => {
       debugger;
