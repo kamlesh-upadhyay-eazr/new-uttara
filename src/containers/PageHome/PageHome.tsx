@@ -18,53 +18,59 @@ const DEMO_CATS: TaxonomyType[] = [
   {
     id: "1",
     href: "/listing-stay",
-    name: "New Yourk",
+    name: "Ramanagara",
     taxonomy: "category",
+    // camp: "Rock Climbing  Course ",
     count: 188288,
     thumbnail:
-      "https://images.pexels.com/photos/64271/queen-of-liberty-statue-of-liberty-new-york-liberty-statue-64271.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
+      "https://images.pexels.com/photos/3058762/pexels-photo-3058762.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
   {
     id: "2",
     href: "/listing-stay",
-    name: "Singapore",
+    name: "Badami",
     taxonomy: "category",
+    // camp: "Rock Climbing  Course",
     count: 188288,
     thumbnail:
-      "https://images.pexels.com/photos/7740160/pexels-photo-7740160.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.pexels.com/photos/1729927/pexels-photo-1729927.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
   },
   {
     id: "3",
     href: "/listing-stay",
-    name: "Paris",
+    name: "Jakkur",
     taxonomy: "category",
+    // camp: "Aero Sport Camp",
     count: 188288,
     thumbnail:
-      "https://images.pexels.com/photos/739407/pexels-photo-739407.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
+      "https://images.unsplash.com/photo-1526385604508-05e4e7f0bc61?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=1032&q=80",
   },
   {
     id: "4",
     href: "/listing-stay",
-    name: "London",
+    name: "Dandeli",
     taxonomy: "category",
+    // camp: "River Rafting and Kayaking Course",
     count: 188288,
     thumbnail:
-      "https://images.pexels.com/photos/460672/pexels-photo-460672.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
+      "https://plus.unsplash.com/premium_photo-1661895579626-0386acbee873?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=387&q=80",
   },
   {
     id: "5",
     href: "/listing-stay",
-    name: "Tokyo",
+    name: "Barpole",
     taxonomy: "category",
+    // camp: "Adventure & Nature Awarenes Camp",
     count: 188288,
     thumbnail:
-      "https://images.pexels.com/photos/4151484/pexels-photo-4151484.jpeg?auto=compress&cs=tinysrgb&dpr=3&h=750&w=1260",
+      "https://plus.unsplash.com/premium_photo-1675403509143-8e567e28f1ea?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=385&q=80",
   },
   {
     id: "6",
     href: "/listing-stay",
-    name: "Maldives",
+    name: "Vani Vilas Sagar",
     taxonomy: "category",
+    // camp: "Aqua Sports Camp",
     count: 188288,
     thumbnail:
       "https://images.pexels.com/photos/3250613/pexels-photo-3250613.jpeg?auto=compress&cs=tinysrgb&dpr=2&h=750&w=1260",
@@ -72,11 +78,22 @@ const DEMO_CATS: TaxonomyType[] = [
   {
     id: "7",
     href: "/listing-stay",
-    name: "Mumbai",
+    name: "KRS",
     taxonomy: "category",
+    // camp: "Aqua Sports Camp",
     count: 188288,
     thumbnail:
-      "https://images.pexels.com/photos/3893788/pexels-photo-3893788.jpeg?auto=compress&cs=tinysrgb&w=1260&h=750&dpr=1",
+      "https://images.unsplash.com/photo-1555572151-ed24ab503e09?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=371&q=80",
+  },
+  {
+    id: "8",
+    href: "/listing-stay",
+    name: "Chikmagalur",
+    taxonomy: "category",
+    // camp: "Mountain Biking Course",
+    count: 188288,
+    thumbnail:
+      "https://images.unsplash.com/photo-1511994298241-608e28f14fde?ixlib=rb-4.0.3&ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&auto=format&fit=crop&w=870&q=80",
   },
 ];
 

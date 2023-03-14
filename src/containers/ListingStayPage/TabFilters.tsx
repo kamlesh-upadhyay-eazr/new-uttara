@@ -457,13 +457,13 @@ const TabFilters = () => {
   const renderTabMoreFilterMobile = () => {
     return (
       <div>
-        <div
+        {/* <div
           className={`flex lg:hidden items-center justify-center px-4 py-2 text-sm rounded-full border border-primary-500 bg-primary-50 text-primary-700 focus:outline-none cursor-pointer`}
           onClick={openModalMoreFilterMobile}
         >
           <span>More filters (3)</span>
           {renderXClear()}
-        </div>
+        </div> */}
 
         <Transition appear show={isOpenMoreFilterMobile} as={Fragment}>
           <Dialog

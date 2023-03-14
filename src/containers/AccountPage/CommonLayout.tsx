@@ -22,7 +22,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
             >
               Account info
             </NavLink>
-            <NavLink
+            {/* <NavLink
               to="/account-savelists"
               className={({ isActive }) =>
                 `block py-5 md:py-8 border-b-2 flex-shrink-0 ${
@@ -51,7 +51,7 @@ const CommonLayout: FC<CommonLayoutProps> = ({ children }) => {
               }
             >
               Change Billing
-            </NavLink>
+            </NavLink> */}
           </div>
         </div>
       </div>

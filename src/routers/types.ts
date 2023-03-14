@@ -24,9 +24,10 @@ export interface LocationStates {
   "/listing-car"?: {};
   "/listing-car-map"?: {};
   "/listing-car-detail"?: {};
+  "/user-bookings/:id"?: {};
   //
   "/checkout"?: {};
-  "/pay-done"?: {};
+  "/pay-done/:id"?: {};
   //
   "/account"?: {};
   "/account-savelists"?: {};
@@ -63,6 +64,11 @@ export interface LocationStates {
 export type PathName = keyof LocationStates;
 
 export interface Page {
+  path: PathName;
+  exact?: boolean;
+  component: ComponentType<Object> | any;
+}
+export interface ProtectedPages {
   path: PathName;
   exact?: boolean;
   component: ComponentType<Object> | any;

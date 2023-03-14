@@ -31,8 +31,8 @@ const GuestsInput: FC<GuestsInputProps> = ({
   hasButtonSubmit = true,
 }) => {
   const [guestAdultsInputValue, setGuestAdultsInputValue] = useState(0);
-  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(0);
-  const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0);
+  const [guestChildrenInputValue, setGuestChildrenInputValue] = useState(1);
+  // const [guestInfantsInputValue, setGuestInfantsInputValue] = useState(0);
 
   // useEffect(() => {
   //   setGuestAdultsInputValue(defaultValue.guestAdults || 0);
@@ -44,7 +44,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
     let newValue = {
       guestAdults: guestAdultsInputValue,
       guestChildren: guestChildrenInputValue,
-      guestInfants: guestInfantsInputValue,
+      // guestInfants: guestInfantsInputValue,
     };
     if (type === "guestAdults") {
       setGuestAdultsInputValue(value);
@@ -54,15 +54,15 @@ const GuestsInput: FC<GuestsInputProps> = ({
       setGuestChildrenInputValue(value);
       newValue.guestChildren = value;
     }
-    if (type === "guestInfants") {
-      setGuestInfantsInputValue(value);
-      newValue.guestInfants = value;
-    }
+    // if (type === "guestInfants") {
+    //   setGuestInfantsInputValue(value);
+    //   newValue.guestInfants = value;
+    // }
     onChange && onChange(newValue);
   };
   const dispatch = useDispatch();
   const totalGuests =
-    guestChildrenInputValue + guestAdultsInputValue + guestInfantsInputValue;
+    guestChildrenInputValue + guestAdultsInputValue ;
 
   useEffect(() => {
     dispatch(getTotalGuest(totalGuests));
@@ -129,7 +129,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                     // totalParticipants()
                     setGuestAdultsInputValue(0);
                     setGuestChildrenInputValue(0);
-                    setGuestInfantsInputValue(0);
+                    // setGuestInfantsInputValue(0);
                   }}
                 />
               )}
@@ -172,7 +172,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                 desc="Ages 2–12"
               />
 
-              <NcInputNumber
+              {/* <NcInputNumber
                 className="w-full mt-6"
                 defaultValue={guestInfantsInputValue}
                 onChange={(value) => handleChangeData(value, "guestInfants")}
@@ -180,7 +180,7 @@ const GuestsInput: FC<GuestsInputProps> = ({
                 max={4}
                 label="Infants"
                 desc="Ages 0–2"
-              />
+              /> */}
             </Popover.Panel>
           </Transition>
         </>

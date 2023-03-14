@@ -215,7 +215,7 @@ const SiteHeader = () => {
       <Helmet>
         <title>Chisfis || Booking React Template</title>
       </Helmet>
-      {renderControlSelections()}
+      {/* {renderControlSelections()} */}
       {renderHeader()}
       <div ref={anchorRef} className="h-1 absolute invisible"></div>
     </>

@@ -239,39 +239,38 @@ export const setErrorMessage = (error) => {
   };
 };
 
-export const getCurrentAdmin = (admin) => {
-  debugger;
-  return {
-    type: GET_CURRENT_ADMIN_SUCCESS,
-    payload:admin
-  };
-}
-
-// export const getCurrentAdmin = () => {
+// export const getCurrentAdmin = (admin) => {
 //   debugger;
-//   return (dispatch) => {
-//     dispatch(setLoginLoading());
-//     axios
-//       .get(`${ip}/admin/me`, {
-//         // headers: {
-//         //   Authorization: `Bearer ${localStorage.accessToken}`,
-//         // },
-//       })
-//       .then((res) => {
-//         debugger;
-//         dispatch({
-//           type: GET_CURRENT_ADMIN_SUCCESS,
-//           payload: res.data,
-//         });
-//       })
-//       .catch((err) => {
-//         dispatch({
-//           type: GET_CURRENT_ADMIN_FAILED,
-//           payload: err.messaage,
-//         });
-//       });
+//   return {
+//     type: GET_CURRENT_ADMIN_SUCCESS,
+//     payload:admin
 //   };
-// };
+// }
+
+export const getCurrentAdmin = () => {
+  return (dispatch) => {
+    dispatch(setLoginLoading());
+    axios
+      .get(`${ip}/admin/me`, {
+        headers: {
+          Authorization: `Bearer ${localStorage.accessToken}`,
+        },
+      })
+      .then((res) => {
+        debugger;
+        dispatch({
+          type: GET_CURRENT_ADMIN_SUCCESS,
+          payload: res.data,
+        });
+      })
+      .catch((err) => {
+        dispatch({
+          type: GET_CURRENT_ADMIN_FAILED,
+          payload: err.messaage,
+        });
+      });
+  };
+};
 
 export const setCurrentAdmin = (decoded) => {
   return {

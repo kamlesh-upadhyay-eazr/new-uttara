@@ -22,6 +22,7 @@ const initialState = {
   contactNumber: "",
   admin: null,
   currentAdmin: [],
+  adminCurrent: [],
   error: null,
 };
 const loginReducer = (state = initialState, action) => {
@@ -135,18 +136,18 @@ const loginReducer = (state = initialState, action) => {
     //     showOtpModal: true,
     //     errors: action.payload,
     //   };
-    // case LOGOUT:
-    //   return {
-    //     ...state,
-    //     isAuthenticated: false,
-    //     loading: false,
-    //     admin: null,
-    //   };
+    case LOGOUT:
+      return {
+        ...state,
+        isAuthenticated: false,
+        loading: false,
+        admin: null,
+      };
     // case SET_CURRENT_ADMIN: {
     //   return {
     //     ...state,
     //     isAuthenticated: !isEmpty(action.payload),
-    //     admin: isEmpty(action.payload) ? null : action.payload,
+    //     adminCurrent: isEmpty(action.payload) ? null : action.payload,
     //   };
     // }
 

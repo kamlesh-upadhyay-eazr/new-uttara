@@ -83,7 +83,7 @@ const MenuBar: React.FC<MenuBarProps> = ({
         </svg>
       </button>
 
-      {renderContent()}
+      {/* {renderContent()} */}
     </>
   );
 };

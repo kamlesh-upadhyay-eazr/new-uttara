@@ -1,4 +1,8 @@
-import { GET_TOTAL_GUEST, GET_TOTAL_PRICE, INCREMENT_CHILD } from "./actionTypes";
+import {
+  GET_TOTAL_GUEST,
+  GET_TOTAL_PRICE,
+  INCREMENT_CHILD,
+} from "./actionTypes";
 
 export const getTotalGuest = (total) => {
   return {

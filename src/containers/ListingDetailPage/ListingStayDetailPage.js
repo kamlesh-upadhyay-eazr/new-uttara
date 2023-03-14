@@ -37,6 +37,7 @@ import { ip } from "config/config";
 import { useDispatch } from "react-redux";
 import { getTotalPrice } from "store/guestCounter/action";
 import { getCurrentAdmin } from "store/auth/signin/actions";
+import { ticketDetails } from "store/users/userActions";
 
 
 
@@ -95,6 +96,7 @@ const ListingStayDetailPage = ({
   // totalGuests
 }) => {
   const [isOpen, setIsOpen] = useState(false);
+  const [title, setTitle] = useState("Beach House in Collingwood");
   const [price, setPrice] = useState(1000);
   const [allGuests, setAllGuests] = useState(0);
   const [openFocusIndex, setOpenFocusIndex] = useState(0);
@@ -121,6 +123,18 @@ const ListingStayDetailPage = ({
 
   const history = useNavigate();
   const dispatch = useDispatch();
+
+  useEffect(() => {
+    const data = {
+      image: PHOTOS[0],
+      title: title,
+      startDate: selectedDate.startDate.format("DD MMM"),
+      endDate: selectedDate.endDate.format("DD MMM"),
+    };
+    dispatch(ticketDetails(data));
+  }, [selectedDate,price]);
+
+
 
   useEffect(() => {
     dispatch(getCurrentAdmin(admin));
@@ -172,7 +186,7 @@ const ListingStayDetailPage = ({
 
         {/* 2 */}
         <h2 className="text-2xl sm:text-3xl lg:text-4xl font-semibold">
-          Beach House in Collingwood
+          {title}
         </h2>
 
         {/* 3 */}
@@ -201,7 +215,7 @@ const ListingStayDetailPage = ({
 
         {/* 6 */}
         <div className="flex items-center justify-between xl:justify-start space-x-8 xl:space-x-12 text-sm text-neutral-700 dark:text-neutral-300">
-          <div className="flex items-center space-x-3 ">
+          <div className="flex items-center space-xAges-3 ">
             <i className=" las la-user text-2xl "></i>
             <span className="">
               6 <span className="hidden sm:inline-block">guests</span>
@@ -378,15 +392,15 @@ const ListingStayDetailPage = ({
           <div className="text-sm sm:text-base text-neutral-6000 dark:text-neutral-300 -mb-4">
             <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
               <span>Monday - Thursday</span>
-              <span>$199</span>
+              <span>₹199</span>
             </div>
             <div className="p-4  flex justify-between items-center space-x-4 rounded-lg">
               <span>Monday - Thursday</span>
-              <span>$199</span>
+              <span>₹199</span>
             </div>
             <div className="p-4 bg-neutral-100 dark:bg-neutral-800 flex justify-between items-center space-x-4 rounded-lg">
               <span>Friday - Sunday</span>
-              <span>$219</span>
+              <span>₹219</span>
             </div>
             <div className="p-4 flex justify-between items-center space-x-4 rounded-lg">
               <span>Rent by month</span>
@@ -582,7 +596,7 @@ const ListingStayDetailPage = ({
 
   const renderSection7 = () => {
     return (
-      <div className="listingSection__wrap">
+      <div className="listingSection__wrap" style={{marginBottom:"40px"}}>
         {/* HEADING */}
         <div>
           <h2 className="text-2xl font-semibold">Location</h2>
@@ -674,7 +688,7 @@ const ListingStayDetailPage = ({
     setAllGuests(childData);
   };
 
-  const serviceCharge = price / 8 || 0;
+  const serviceCharge = price * totalGuest /20;
    const amount = price * totalGuest + serviceCharge;
 
    useEffect(() => {
@@ -688,7 +702,7 @@ const ListingStayDetailPage = ({
         {/* PRICE */}
         <div className="flex justify-between">
           <span className="text-3xl font-semibold">
-            ${price}
+            ₹{price}
             <span className="ml-1 text-base font-normal text-neutral-500 dark:text-neutral-400">
               /Day
             </span>
@@ -712,8 +726,8 @@ const ListingStayDetailPage = ({
             fieldClassName="p-3"
             defaultValue={{
               guestAdults: 0,
-              guestChildren: 0,
-              guestInfants: 0,
+              guestChildren: 1,
+              // guestInfants: 0,
             }}
             eventPrice={price}
             parentCallback={callbackFunction}
@@ -725,14 +739,14 @@ const ListingStayDetailPage = ({
         <div className="flex flex-col space-y-4">
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
             <span>
-              ${price} x {totalGuest} participants
+              ₹{price} x {totalGuest} participants
             </span>
-            {/* <span>${price * allGuests || 4}</span> */}
-            <span>${price * totalGuest || 0}</span>
+            {/* <span>₹{price * allGuests || 4}</span> */}
+            <span>₹{price * totalGuest || 0}</span>
           </div>
           <div className="flex justify-between text-neutral-6000 dark:text-neutral-300">
             <span>Service charge</span>
-            <span>${serviceCharge || 0}</span>
+            <span>₹{serviceCharge || 0}</span>
           </div>
           <div className="border-b border-neutral-200 dark:border-neutral-700"></div>
           <div className="flex justify-between font-semibold">
@@ -751,6 +765,7 @@ const ListingStayDetailPage = ({
           <ButtonPrimary href={`/ParticipantForm/${UserId}`}>
             Reserve
           </ButtonPrimary>
+          
         )}
       </div>
     );
@@ -878,14 +893,14 @@ const ListingStayDetailPage = ({
         {/* CONTENT */}
         <div className="w-full lg:w-3/5 xl:w-2/3 space-y-8 lg:space-y-10 lg:pr-10">
           {renderSection1()}
-          {renderSection2()}
+          {/* {renderSection2()} */}
           {renderSection3()}
-          {renderSection4()}
-          {renderSectionCheckIndate()}
-          {renderSection5()}
+          {/* {renderSection4()} */}
+          {/* {renderSectionCheckIndate()} */}
+          {/* {renderSection5()} */}
           {/* {renderSection6()} */}
           {renderSection7()}
-          {renderSection8()}
+          {/* {renderSection8()} */}
         </div>
 
         {/* SIDEBAR */}
@@ -898,9 +913,9 @@ const ListingStayDetailPage = ({
       {!isPreviewMode && <MobileFooterSticky />}
 
       {/* OTHER SECTION */}
-      {!isPreviewMode && (
+      {/* {!isPreviewMode && (
         <div className="container py-24 lg:py-32">
-          {/* SECTION 1 */}
+          SECTION 1
           <div className="relative py-16">
             <BackgroundSection />
             <SectionSliderNewCategories
@@ -913,10 +928,10 @@ const ListingStayDetailPage = ({
             />
           </div>
 
-          {/* SECTION */}
+          SECTION
           <SectionSubscribe2 className="pt-24 lg:pt-32" />
         </div>
-      )}
+      )} */}
     </div>
   );
 };

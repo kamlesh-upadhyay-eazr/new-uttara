@@ -7,16 +7,22 @@ import Select from "shared/Select/Select";
 import Textarea from "shared/Textarea/Textarea";
 import CommonLayout from "./CommonLayout";
 import { Helmet } from "react-helmet";
+import { useSelector } from "react-redux";
 
 export interface AccountPageProps {
   className?: string;
 }
 
 const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
+
+  const {admin} = useSelector((state: any) => state.loginReducer);
+
+  console.log("admin", admin);
+  
   return (
     <div className={`nc-AccountPage ${className}`} data-nc-id="AccountPage">
       <Helmet>
-        <title>Account || Booking React Template</title>
+        <title>Account </title>
       </Helmet>
       <CommonLayout>
         <div className="space-y-6 sm:space-y-8">
@@ -55,7 +61,7 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
             <div className="flex-grow mt-10 md:mt-0 md:pl-16 max-w-3xl space-y-6">
               <div>
                 <Label>Name</Label>
-                <Input className="mt-1.5" defaultValue="Eden Tuan" />
+                <Input className="mt-1.5" defaultValue={admin?.firstName || "eden"} />
               </div>
               {/* ---- */}
               <div>
@@ -69,31 +75,31 @@ const AccountPage: FC<AccountPageProps> = ({ className = "" }) => {
               {/* ---- */}
               <div>
                 <Label>Username</Label>
-                <Input className="mt-1.5" defaultValue="@eden_tuan" />
+                <Input className="mt-1.5" defaultValue={ admin?.firstName ||"@eden_tuan"} />
               </div>
               {/* ---- */}
               <div>
                 <Label>Email</Label>
-                <Input className="mt-1.5" defaultValue="example@email.com" />
+                <Input className="mt-1.5" defaultValue={admin?.email || ""} />
               </div>
               {/* ---- */}
-              <div className="max-w-lg">
+              {/* <div className="max-w-lg">
                 <Label>Date of birth</Label>
                 <Input
                   className="mt-1.5"
                   type="date"
                   defaultValue="1990-07-22"
                 />
-              </div>
+              </div> */}
               {/* ---- */}
-              <div>
+              {/* <div>
                 <Label>Addess</Label>
                 <Input className="mt-1.5" defaultValue="New york, USA" />
-              </div>
+              </div> */}
               {/* ---- */}
               <div>
                 <Label>Phone number</Label>
-                <Input className="mt-1.5" defaultValue="003 888 232" />
+                <Input className="mt-1.5" defaultValue={admin?.contactNumber || ""} />
               </div>
               {/* ---- */}
               <div>

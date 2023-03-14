@@ -1,9 +1,12 @@
-import React, { FC, ReactNode } from "react";
+import React, { FC, ReactNode, useEffect } from "react";
 import { DEMO_STAY_LISTINGS } from "data/listings";
 import { StayDataType } from "data/types";
 import ButtonPrimary from "shared/Button/ButtonPrimary";
 import HeaderFilter from "./HeaderFilter";
 import StayCard from "components/StayCard/StayCard";
+import { getEvents } from "store/activity/action";
+import { useDispatch } from "react-redux";
+import { useSelector } from "react-redux";
 
 // OTHER DEMO WILL PASS PROPS
 const DEMO_DATA: StayDataType[] = DEMO_STAY_LISTINGS.filter((_, i) => i < 10);
@@ -19,7 +22,7 @@ export interface SectionGridFeaturePlacesProps {
 }
 
 const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
-  stayListings = DEMO_DATA,
+  // stayListings = DEMO_DATA,
   gridClass = "",
   heading = "Featured places to stay",
   subHeading = "Popular places to stay that Chisfis recommends for you",
@@ -29,6 +32,15 @@ const SectionGridFeaturePlaces: FC<SectionGridFeaturePlacesProps> = ({
   const renderCard = (stay: StayDataType) => {
     return <StayCard key={stay.id} data={stay} />;
   };
+  const dispatch = useDispatch();
+  const {events} = useSelector((state:any) => state.event)
+
+  useEffect(() => {
+    dispatch<any>(getEvents());
+  },[]);
+
+console.log("events", events);
+
 
   return (
     <div className="nc-SectionGridFeaturePlaces relative">

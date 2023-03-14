@@ -3,6 +3,7 @@ import { XMarkIcon } from "@heroicons/react/24/solid";
 import { DateRage } from "components/HeroSearchForm/StaySearchForm";
 import { GuestsObject } from "components/HeroSearchForm2Mobile/GuestsInput";
 import CheckOutPage from "containers/CheckOutPage/CheckOutPage";
+import ParticipantForm from "containers/ParticipantForm/ParticipantForm";
 import React, { FC, Fragment, useState } from "react";
 
 interface ModalReserveMobileProps {
@@ -75,7 +76,8 @@ const ModalReserveMobile: FC<ModalReserveMobileProps> = ({
 
                     <div className="flex-1 pt-12 py-1 flex flex-col ">
                       <div className="flex-1 bg-white dark:bg-neutral-900">
-                        <CheckOutPage />
+                        {/* <CheckOutPage /> */}
+                        <ParticipantForm />
                       </div>
                     </div>
                   </>

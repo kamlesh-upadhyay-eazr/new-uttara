@@ -35,8 +35,8 @@ import { ip } from "config/config";
 
 const resolver = async (values) => {
   return {
-    values: values.contactNumber ? values : {},
-    errors: !values.contactNumber
+    values: values.contactNumber && values.email ? values : {},
+    errors: !values.contactNumber && values.email
       ? {
           contactNumber: {
             type: "required",
@@ -83,8 +83,6 @@ const PageSignUp = ({ className = "" }) => {
 
   const [error, setError] = useState("Not Valid");
   const onSubmit = (data) => {
-    debugger;
-    console.log("data", data);
     dispatch(registerAdminSuccess(data, history));
   };
 

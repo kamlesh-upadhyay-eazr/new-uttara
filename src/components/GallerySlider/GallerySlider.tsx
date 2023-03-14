@@ -42,7 +42,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
         className="glide__bullets flex items-center justify-center absolute bottom-2 left-1/2 transform -translate-x-1/2 space-x-1.5"
         data-glide-el="controls[nav]"
       >
-        {galleryImgs.map((_, i) => (
+        {galleryImgs?.map((_, i) => (
           <button
             className="glide__bullet w-1.5 h-1.5 rounded-full bg-neutral-300"
             key={i}
@@ -58,7 +58,7 @@ const GallerySlider: FC<GallerySliderProps> = ({
       <div className={`${UNIQUE_CLASS} relative group overflow-hidden`}>
         <div className="glide__track" data-glide-el="track">
           <ul className="glide__slides">
-            {galleryImgs.map((item, index) => (
+            {galleryImgs?.map((item, index) => (
               <li key={index} className="glide__slide">
                 <Link to={href} className={`block ${ratioClass}`}>
                   <NcImage src={item} />

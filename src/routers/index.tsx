@@ -1,6 +1,12 @@
 import React, { ComponentType } from "react";
-import { BrowserRouter, Routes, Route, Navigate, RouteProps } from "react-router-dom";
-import { Page } from "./types";
+import {
+  BrowserRouter,
+  Routes,
+  Route,
+  Navigate,
+  RouteProps,
+} from "react-router-dom";
+import { Page, ProtectedPages } from "./types";
 import ScrollToTop from "./ScrollToTop";
 import Footer from "shared/Footer/Footer";
 import PageHome from "containers/PageHome/PageHome";
@@ -14,7 +20,6 @@ import ListingCarPage from "containers/ListingCarPage/ListingCarPage";
 import ListingCarMapPage from "containers/ListingCarPage/ListingCarMapPage";
 import ListingCarDetailPage from "containers/ListingDetailPage/ListingCarDetailPage";
 import CheckOutPage from "containers/CheckOutPage/CheckOutPage";
-import PayPage from "containers/PayPage/PayPage";
 import AuthorPage from "containers/AuthorPage/AuthorPage";
 import AccountPage from "containers/AccountPage/AccountPage";
 import AccountPass from "containers/AccountPage/AccountPass";
@@ -49,6 +54,9 @@ import PageSignUp from "containers/PageSignUp/PageSignUp";
 import ListingStayDetailPage from "containers/ListingDetailPage/ListingStayDetailPage";
 import ParticipantForm from "containers/ParticipantForm/ParticipantForm";
 import { useSelector } from "react-redux";
+import BookingsTable from "containers/ParticipantForm/BookingsTable";
+import PayPage from "containers/PayPage/PayPage";
+import ProtectedRoutes from "./ProtectedRoutes";
 
 export const pages: Page[] = [
   { path: "/", exact: true, component: PageHome },
@@ -59,7 +67,7 @@ export const pages: Page[] = [
   //
   { path: "/listing-stay", component: ListingStayPage },
   { path: "/listing-stay-map", component: ListingStayMapPage },
-  { path: "/listing-stay-detail", component: ListingStayDetailPage },
+  // { path: "/listing-stay-detail", component: ListingStayDetailPage },
   //
   {
     path: "/listing-experiences",
@@ -84,10 +92,10 @@ export const pages: Page[] = [
   { path: "/listing-flights", component: ListingFlightsPage },
   //
   { path: "/checkout", component: CheckOutPage },
-  { path: "/pay-done", component: PayPage },
+  { path: "/pay-done/:id", component: PayPage },
   //
   { path: "/author", component: AuthorPage },
-  { path: "/account", component: AccountPage },
+  // { path: "/account", component: AccountPage },
   { path: "/account-password", component: AccountPass },
   { path: "/account-savelists", component: AccountSavelists },
   { path: "/account-billing", component: AccountBilling },
@@ -105,6 +113,7 @@ export const pages: Page[] = [
   { path: "/add-listing-8", component: PageAddListing8 },
   { path: "/add-listing-9", component: PageAddListing9 },
   { path: "/add-listing-10", component: PageAddListing10 },
+  // { path: "/user-bookings/:id", component: BookingsTable },
   //
   { path: "/contact", component: PageContact },
   { path: "/about", component: PageAbout },
@@ -116,13 +125,19 @@ export const pages: Page[] = [
   //
 ];
 
+export const protectedPages: ProtectedPages[] = [
+  { path: "/account", component: AccountPage },
+  { path: "/listing-stay-detail", component: ListingStayDetailPage },
+  { path: "/user-bookings/:id", component: BookingsTable },
+];
+
 const MyRoutes = () => {
   const WIN_WIDTH = useWindowSize().width || window.innerWidth;
 
-  const { isAuthenticated, isAuthProtected } = useSelector(
+  const { isAuthenticated, admin } = useSelector(
     (state: any) => state.loginReducer
   );
-
+  console.log(isAuthenticated);
 
   // const ProtectedRoute = ({
   //   component: Component,
@@ -157,17 +172,21 @@ const MyRoutes = () => {
 
   // const ProtectedRoute: React.FC<ProtectedRouteProps> = ({ component: Component, isAuthenticated, ...rest }) => {
   return (
-    
-    <BrowserRouter basename={"chisfis"}>
+    <BrowserRouter basename={""}>
       <ScrollToTop />
       <SiteHeader />
-      
+
       <Routes>
         {pages.map(({ component, path }) => {
           const Component = component;
           return <Route key={path} element={<Component />} path={path} />;
         })}
-        <Route element={`/`} />
+        <Route element={<ProtectedRoutes />}>
+          {protectedPages.map(({ component, path }) => {
+            const Component = component;
+            return <Route key={path} element={<Component />} path={path} />;
+          })}
+        </Route>
       </Routes>
 
       {WIN_WIDTH < 768 && <FooterNav />}
